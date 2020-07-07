@@ -42,4 +42,12 @@ public class AccessValidatorService {
     public boolean removeSubscriber(long userId) {
         return this.subscriberUserIds.remove(userId);
     }
+
+    public List<Long> getAdminUserIds() {
+        return adminUserIds;
+    }
+
+    public List<Long> getSubscriberUserIds() {
+        return subscriberUserIds;
+    }
 }
