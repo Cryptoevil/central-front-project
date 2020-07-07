@@ -5,12 +5,12 @@
     <parent>
         <artifactId>central-front-project</artifactId>
         <groupId>pro.cryptoevil</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>front-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
 
     <dependencies>
         <dependency>
