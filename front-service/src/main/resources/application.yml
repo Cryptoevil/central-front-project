@@ -1,0 +1,57 @@
+project:
+  version: '@project.version@'
+
+server:
+  port: 5612
+
+spring:
+  application:
+    name: CENTRAL-FRONT-SERVICE
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://xmachine.cryptoevil.pro:9091/eureka/}
+  instance:
+    prefer-ip-address: false
+
+feign:
+  hystrix:
+    command:
+      default:
+        execution:
+          timeout:
+            enabled: "false"
+          isolation:
+            strategy: THREAD
+            thread:
+              timeoutInMilliseconds: 21000
+    enabled: true
+
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
+
+api:
+  telegram:
+    bot:
+      username: CentralBot
+      token: 909840971:AAHZqu5RUQGcnANSV_YoDwKMGUKt_HXp5N4
+  web:
+    admin:
+      token: GasdERqxGPs
+
+service:
+  telegram:
+    bot:
+      adminUserIds: 376309226
+      subscriberUserIds: 1
+
+  processor:
+    check-delay: 60000
+
+logging:
+  file:
+    name: ${spring.application.name}.log

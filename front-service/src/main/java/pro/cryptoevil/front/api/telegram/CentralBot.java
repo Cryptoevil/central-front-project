@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import pro.cryptoevil.front.service.telegram.BotResponseListener;
+import pro.cryptoevil.front.service.telegram.MessageHandler;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
-import javax.websocket.MessageHandler;
+
 import java.io.Serializable;
 
 @Slf4j
@@ -26,7 +29,8 @@ public class CentralBot extends TelegramLongPollingBot implements BotResponseLis
 
     @Override
     public void onUpdateReceived(Update update) {
-
+        log.info("onUpdateReceived -> chatId: {}", update.getMessage().getChatId());
+        this.messageHandler.obtainUpdate(update);
     }
 
     @Override
@@ -39,8 +43,19 @@ public class CentralBot extends TelegramLongPollingBot implements BotResponseLis
         return this.botToken;
     }
 
+    private void sendMessage(BotApiMethod<? extends Serializable> method) {
+        try {
+            sendApiMethod(method);
+        } catch (TelegramApiException e) {
+            log.error("Error while send message: ", e);
+        }
+    }
+
     @Override
     public void onResponse(Flux<? extends BotApiMethod<? extends Serializable>> botApiMethod) {
-
+        botApiMethod
+                .subscribeOn(Schedulers.elastic())
+                .log()
+                .subscribe(this::sendMessage);
     }
 }
